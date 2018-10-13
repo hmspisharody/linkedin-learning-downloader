@@ -187,10 +187,11 @@ async def write_subtitles(subs, output_path, video_duration):
         for line in starmap(subs_to_lines, enumerate(subs, start=1)):
             f.write(line.encode('utf8'))
 
+timeout = aiohttp.ClientTimeout(total = 60*60)
 
 async def download_file(url, output):
     async with aiohttp.ClientSession(headers=HEADERS, cookie_jar=COOKIE_JAR) as session:
-        async with session.get(url, proxy=PROXY, headers=HEADERS) as r:
+        async with session.get(url, proxy=PROXY, headers=HEADERS, timeout=timeout) as r:
             try:
                 with open(output, 'wb') as f:
                     while True:
